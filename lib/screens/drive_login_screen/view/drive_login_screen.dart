@@ -1,4 +1,5 @@
 import 'package:docucare/custom_widgets/custom_back_button.dart';
+import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/styles/app_styles.dart';
 import 'package:docucare/utils/core.dart';
@@ -28,10 +29,15 @@ class DriveLoginScreen extends ConsumerWidget {
                 style: Theme.of(context).textTheme.headlineLarge,
               ),
               const SizedBox(height: 8),
-              Text(
-                "Login to your Account.",
-                style: AppStyles.bodyExtraLarge.copyWith(
-                  color: AppColors.primaryColor,
+              InkWell(
+                onTap: () {
+                  Navigator.pushNamed(context, RoutesNames.home);
+                },
+                child: Text(
+                  "Login to your Account.",
+                  style: AppStyles.bodyExtraLarge.copyWith(
+                    color: AppColors.primaryColor,
+                  ),
                 ),
               ),
               const SizedBox(height: 12),
