@@ -5,6 +5,8 @@ final emailProvider = StateProvider<String>((ref) => '');
 final passwordProvider = StateProvider<String>((ref) => '');
 final confirmPasswordProvider = StateProvider<String>((ref) => '');
 final termsAcceptedProvider = StateProvider<bool>((ref) => false);
+final showPasswordProvider = StateProvider<bool>((ref) => true);
+final showConfirmPasswordProvider = StateProvider<bool>((ref) => true);
 final formErrorProvider =
     StateProvider.autoDispose<Map<String, String>>((ref) => {});
 
@@ -71,6 +73,8 @@ class RegistrationStateNotifier extends StateNotifier<RegistrationState> {
     ref.invalidate(passwordProvider);
     ref.invalidate(confirmPasswordProvider);
     ref.invalidate(termsAcceptedProvider);
+    ref.invalidate(showPasswordProvider);
+    ref.invalidate(showConfirmPasswordProvider);
   }
 
   /// Show an error toast message with the provided error message

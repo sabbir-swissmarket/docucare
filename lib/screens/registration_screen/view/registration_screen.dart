@@ -97,6 +97,8 @@ class RegistrationScreen extends ConsumerWidget {
     final passwordError = ref.watch(formErrorProvider)['password'];
     final confirmPasswordError =
         ref.watch(formErrorProvider)['confirmPassword'];
+    final showPassword = ref.watch(showPasswordProvider);
+    final showConfirmPassword = ref.watch(showConfirmPasswordProvider);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -116,9 +118,20 @@ class RegistrationScreen extends ConsumerWidget {
         const SizedBox(height: 10),
         CustomTextfield(
           controller: passwordController,
-          obscureText: true,
+          obscureText: showPassword,
           hintText: "********",
           errorText: passwordError,
+          suffixIcon: InkWell(
+            onTap: () {
+              ref
+                  .read(showPasswordProvider.notifier)
+                  .update((state) => !showPassword);
+            },
+            child: Icon(
+              showPassword ? Icons.visibility_off : Icons.visibility,
+              color: AppColors.iconColor,
+            ),
+          ),
           onChanged: (value) {
             ref.read(passwordProvider.notifier).update((state) => value);
           },
@@ -128,9 +141,20 @@ class RegistrationScreen extends ConsumerWidget {
         const SizedBox(height: 10),
         CustomTextfield(
           controller: confirmPasswordController,
-          obscureText: true,
+          obscureText: showConfirmPassword,
           hintText: "********",
           errorText: confirmPasswordError,
+          suffixIcon: InkWell(
+            onTap: () {
+              ref
+                  .read(showConfirmPasswordProvider.notifier)
+                  .update((state) => !showConfirmPassword);
+            },
+            child: Icon(
+              showConfirmPassword ? Icons.visibility_off : Icons.visibility,
+              color: AppColors.iconColor,
+            ),
+          ),
           onChanged: (value) {
             ref.read(confirmPasswordProvider.notifier).update((state) => value);
           },
