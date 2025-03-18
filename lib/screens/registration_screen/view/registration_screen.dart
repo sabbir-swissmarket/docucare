@@ -2,6 +2,7 @@ import 'package:docucare/custom_widgets/custom_back_button.dart';
 import 'package:docucare/custom_widgets/custom_button.dart';
 import 'package:docucare/custom_widgets/custom_textfield.dart';
 import 'package:docucare/custom_widgets/loader.dart';
+import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/screens/registration_screen/provider/registration_provider.dart';
 import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/styles/app_styles.dart';
@@ -25,65 +26,70 @@ class RegistrationScreen extends ConsumerWidget {
       },
       child: Scaffold(
         backgroundColor: AppColors.whiteColor,
-        body: Consumer(
-          builder: (context, ref, child) {
-            RegistrationState state = ref.watch(registrationNotifierProvider);
-            if (state is InitRegistrationState) {
-              return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    const SizedBox(height: 60),
-                    CustomBackButton(
-                      onPressed: () {
-                        ref
-                            .read(registrationNotifierProvider.notifier)
-                            .invalidateProviders(ref);
-                        Navigator.pop(context);
-                      },
+        body: SafeArea(
+          child: Consumer(
+            builder: (context, ref, child) {
+              RegistrationState state = ref.watch(registrationNotifierProvider);
+              if (state is InitRegistrationState) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(24, 40, 24, 0),
+                  child: SingleChildScrollView(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        CustomBackButton(
+                          onPressed: () {
+                            ref
+                                .read(registrationNotifierProvider.notifier)
+                                .invalidateProviders(ref);
+                            Navigator.pop(context);
+                          },
+                        ),
+                        const SizedBox(height: 20),
+                        Text(
+                          "Create an Account",
+                          style: Theme.of(context).textTheme.headlineLarge,
+                        ),
+                        const SizedBox(height: 10),
+                        const Text(
+                          "Establish a secure account for cloud document storage.",
+                          style: AppStyles.bodyExtraLarge,
+                        ),
+                        const SizedBox(height: 30),
+                        formWidgets(
+                          ref,
+                          emailController: emailController,
+                          passwordController: passwordController,
+                          confirmPasswordController: confirmPasswordController,
+                        ),
+                        const SizedBox(height: 10),
+                        policyCheckWidget(ref),
+                        const SizedBox(height: 30),
+                        CustomButton(
+                          text: "Next",
+                          width: width,
+                          onPressed: () {
+                            // ref
+                            //     .read(registrationNotifierProvider.notifier)
+                            //     .validateForm(ref);
+                            Navigator.pushNamed(
+                                context, RoutesNames.emailConfirmationScreen);
+                          },
+                        ),
+                      ],
                     ),
-                    const SizedBox(height: 20),
-                    Text(
-                      "Create an Account",
-                      style: Theme.of(context).textTheme.headlineLarge,
-                    ),
-                    const SizedBox(height: 10),
-                    const Text(
-                      "Establish a secure account for cloud document storage.",
-                      style: AppStyles.bodyExtraLarge,
-                    ),
-                    const SizedBox(height: 30),
-                    formWidgets(
-                      ref,
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      confirmPasswordController: confirmPasswordController,
-                    ),
-                    const SizedBox(height: 10),
-                    policyCheckWidget(ref),
-                    const SizedBox(height: 30),
-                    CustomButton(
-                      text: "Next",
-                      width: width,
-                      onPressed: () {
-                        ref
-                            .read(registrationNotifierProvider.notifier)
-                            .validateForm(ref);
-                      },
-                    ),
-                  ],
-                ),
-              );
-            } else if (state is LoadingRegistrationState) {
-              return const Center(child: Loader());
-            } else if (state is ErrorRegistrationState) {
-              ref
-                  .read(registrationNotifierProvider.notifier)
-                  .showError(state.message);
-            }
-            return const SizedBox.shrink();
-          },
+                  ),
+                );
+              } else if (state is LoadingRegistrationState) {
+                return const Center(child: Loader());
+              } else if (state is ErrorRegistrationState) {
+                ref
+                    .read(registrationNotifierProvider.notifier)
+                    .showError(state.message);
+              }
+              return const SizedBox.shrink();
+            },
+          ),
         ),
       ),
     );

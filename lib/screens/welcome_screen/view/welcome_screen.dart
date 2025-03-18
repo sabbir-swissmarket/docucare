@@ -13,42 +13,46 @@ class WelcomeScreen extends ConsumerWidget {
     final width = locator.get<SizeConfig>().getFullWidth();
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
-      body: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24.0),
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            Text(
-              "Welcome to DocuCare",
-              style: Theme.of(context).textTheme.headlineLarge,
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.fromLTRB(24, 40, 24, 0),
+          child: SingleChildScrollView(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                Text(
+                  "Welcome to DocuCare",
+                  style: Theme.of(context).textTheme.headlineLarge,
+                ),
+                const SizedBox(height: 8),
+                const Text(
+                  "Secure, private, and always accessible in your cloud.",
+                  style: AppStyles.bodyExtraLarge,
+                ),
+                const SizedBox(height: 32),
+                Image.asset(
+                  'assets/images/fingerprint.png',
+                  width: 250,
+                  height: 250,
+                ),
+                const SizedBox(height: 32),
+                CustomButton(
+                  onPressed: () {
+                    Navigator.pushNamed(
+                        context, RoutesNames.registrationScreen);
+                  },
+                  text: "Register",
+                  width: width,
+                ),
+                const SizedBox(height: 16),
+                CustomButton(
+                  onPressed: () {},
+                  text: "Signin",
+                  width: width,
+                ),
+              ],
             ),
-            const SizedBox(height: 8),
-            const Text(
-              "Secure, private, and always accessible in your cloud.",
-              style: AppStyles.bodyExtraLarge,
-            ),
-            const SizedBox(height: 32),
-            Image.asset(
-              'assets/images/fingerprint.png',
-              width: 250,
-              height: 250,
-            ),
-            const SizedBox(height: 32),
-            CustomButton(
-              onPressed: () {
-                Navigator.pushNamed(context, RoutesNames.registrationScreen);
-              },
-              text: "Register",
-              width: width,
-            ),
-            const SizedBox(height: 16),
-            CustomButton(
-              onPressed: () {},
-              text: "Signin",
-              width: width,
-            ),
-          ],
+          ),
         ),
       ),
     );

@@ -68,7 +68,7 @@ class RegistrationStateNotifier extends StateNotifier<RegistrationState> {
   }
 
   /// Invalidate provider
-  invalidateProviders(WidgetRef ref) {
+  void invalidateProviders(WidgetRef ref) {
     ref.invalidate(emailProvider);
     ref.invalidate(passwordProvider);
     ref.invalidate(confirmPasswordProvider);
