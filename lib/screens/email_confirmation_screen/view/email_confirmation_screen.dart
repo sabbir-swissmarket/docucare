@@ -1,5 +1,6 @@
 import 'package:docucare/custom_widgets/custom_back_button.dart';
 import 'package:docucare/custom_widgets/custom_button.dart';
+import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/styles/app_styles.dart';
 import 'package:docucare/utils/core.dart';
@@ -36,7 +37,9 @@ class EmailConfirmationScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
               CustomButton(
-                onPressed: () {},
+                onPressed: () {
+                  Navigator.pushNamed(context, RoutesNames.loginScreen);
+                },
                 text: "Open Email",
                 width: width,
               ),
