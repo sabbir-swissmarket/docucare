@@ -67,7 +67,7 @@ class LoginScreen extends ConsumerWidget {
                             //     .read(registrationNotifierProvider.notifier)
                             //     .validateForm(ref);
                             Navigator.pushNamed(
-                                context, RoutesNames.emailConfirmationScreen);
+                                context, RoutesNames.driveLoginScreen);
                           },
                         ),
                       ],

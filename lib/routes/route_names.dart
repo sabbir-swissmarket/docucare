@@ -12,5 +12,6 @@ class RoutesNames {
   static String registrationScreen = '/registration_screen';
   static String emailConfirmationScreen = '/email_confirmation_screen';
   static String loginScreen = '/login_screen';
+  static String driveLoginScreen = '/drive_login_screen';
   static String home = '/home';
 }
