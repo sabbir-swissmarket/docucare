@@ -9,3 +9,4 @@ export 'package:shared_preferences/shared_preferences.dart';
 export 'package:enum_to_string/enum_to_string.dart';
 export 'package:url_launcher/url_launcher.dart';
 export 'package:google_sign_in/google_sign_in.dart';
+export 'package:file_picker/file_picker.dart';

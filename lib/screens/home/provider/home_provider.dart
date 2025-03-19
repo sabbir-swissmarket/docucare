@@ -61,14 +61,12 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
 
       final authClient = await apiService.authenticateWithGoogle(accessToken);
 
-      // Fetch user profile
       final peopleApi = people.PeopleServiceApi(authClient);
       final profile =
           await peopleApi.people.get('people/me', personFields: 'names');
       final profileName = profile.names?.first.displayName ?? 'Unknown';
       ref.read(userNameProvider.notifier).update((state) => profileName);
 
-      // Fetch storage quota
       final driveApi = drive.DriveApi(authClient);
       final about = await driveApi.about.get($fields: 'storageQuota');
       final usageGB =
@@ -78,7 +76,6 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
       final storageQuota = '$usageGB / $limitGB';
       ref.read(storageQuotaProvder.notifier).update((state) => storageQuota);
 
-      // Fetch folders and files
       final folderResponse = await driveApi.files.list(
         q: "mimeType='application/vnd.google-apps.folder'",
         $fields: 'files(id, name, createdTime)',
@@ -99,6 +96,7 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
                 .toList() ??
             [];
         return FolderModel(
+          id: folder.id ?? "",
           name: folder.name ?? 'Unnamed Folder',
           createdTime: folder.createdTime.toString(),
           files: files,
@@ -109,7 +107,14 @@ class HomeStateNotifier extends StateNotifier<HomeState> {
       ref.read(folderListProvider.notifier).update((state) => folders);
     } catch (e, stackTrace) {
       debugPrint("Error in signInAndFetchData: $e\n$stackTrace");
-      state = ErrorHomeState(message: e.toString());
+      if (e
+          .toString()
+          .toLowerCase()
+          .contains("Access was denied".toLowerCase())) {
+        await getAccessToken(ref);
+      } else {
+        state = ErrorHomeState(message: e.toString());
+      }
     }
   }
 

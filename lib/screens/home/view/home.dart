@@ -1,6 +1,6 @@
-import 'dart:async';
-
 import 'package:docucare/custom_widgets/loader.dart';
+import 'package:docucare/routes/route_names.dart';
+import 'package:docucare/screens/home/folder_view/provider/folder_view_provider.dart';
 import 'package:docucare/screens/home/models/folder_model.dart';
 import 'package:docucare/screens/home/provider/home_provider.dart';
 import 'package:docucare/styles/app_colors.dart';
@@ -15,26 +15,11 @@ class Home extends ConsumerStatefulWidget {
 }
 
 class _HomeState extends ConsumerState<Home> {
-  Timer? _timer;
-
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       ref.read(homeNotifierProvider.notifier).loadData(ref);
-      startTimer(ref);
-    });
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    _timer?.cancel();
-  }
-
-  Future<void> startTimer(WidgetRef ref) async {
-    _timer = Timer.periodic(const Duration(hours: 1), (timer) async {
-      await ref.read(homeNotifierProvider.notifier).getAccessToken(ref);
     });
   }
 
@@ -121,45 +106,40 @@ class _HomeState extends ConsumerState<Home> {
 
   Widget _buildCategoryCard(FolderModel category) {
     final notifier = ref.read(homeNotifierProvider.notifier);
-    return Container(
-      padding: const EdgeInsets.all(12),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.black12),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Image.asset(
-            'assets/images/folder.png',
-            width: 30,
-            height: 30,
-            color: AppColors.primaryColor,
-          ),
-          const SizedBox(height: 10),
-          Text(
-            category.name,
-            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          const Spacer(),
-          Text(
-            notifier.getDateTime(category.createdTime),
-            style: const TextStyle(fontSize: 12, color: Colors.redAccent),
-          ),
-        ],
+    return InkWell(
+      onTap: () {
+        ref.read(folderIdProvider.notifier).update((state) => category.id);
+        Navigator.pushNamed(context, RoutesNames.folderViewScreen,
+            arguments: category);
+      },
+      child: Container(
+        padding: const EdgeInsets.all(12),
+        decoration: BoxDecoration(
+          border: Border.all(color: Colors.black12),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Image.asset(
+              'assets/images/folder.png',
+              width: 30,
+              height: 30,
+              color: AppColors.primaryColor,
+            ),
+            const SizedBox(height: 10),
+            Text(
+              category.name,
+              style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+            ),
+            const Spacer(),
+            Text(
+              notifier.getDateTime(category.createdTime),
+              style: const TextStyle(fontSize: 12, color: Colors.redAccent),
+            ),
+          ],
+        ),
       ),
     );
   }
 }
-
-// final List<Map<String, String>> categories = [
-//   {'title': 'Personal Documents', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Financial Documents', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Health Documents', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Educational Documents', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Legal Documents', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Professional Documents', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Residential & Vehicle', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Travel & Residence', 'date': '12/10/2024, 5:42 PM'},
-//   {'title': 'Other', 'date': '12/10/2024, 5:42 PM'},
-// ];

@@ -14,4 +14,6 @@ class RoutesNames {
   static String loginScreen = '/login_screen';
   static String driveLoginScreen = '/drive_login_screen';
   static String home = '/home';
+  static String folderViewScreen = '/folder_view';
+  static String uploadDocumentScreen = '/upload_document_screen';
 }
