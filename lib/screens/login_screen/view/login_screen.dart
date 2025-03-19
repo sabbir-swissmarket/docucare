@@ -2,7 +2,6 @@ import 'package:docucare/custom_widgets/custom_back_button.dart';
 import 'package:docucare/custom_widgets/custom_button.dart';
 import 'package:docucare/custom_widgets/custom_textfield.dart';
 import 'package:docucare/custom_widgets/loader.dart';
-import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/screens/login_screen/provider/login_screen_provider.dart';
 import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/styles/app_styles.dart';
@@ -27,7 +26,7 @@ class LoginScreen extends ConsumerWidget {
           child: Consumer(
             builder: (context, ref, child) {
               LoginState state = ref.watch(loginNotifierProvider);
-              if (state is InitLoginState) {
+              if (state is InitLoginState || state is LoadingLoginState) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(24, 40, 24, 0),
                   child: SingleChildScrollView(
@@ -59,23 +58,21 @@ class LoginScreen extends ConsumerWidget {
                           passwordController: passwordController,
                         ),
                         const SizedBox(height: 60),
-                        CustomButton(
-                          text: "Next",
-                          width: width,
-                          onPressed: () {
-                            // ref
-                            //     .read(registrationNotifierProvider.notifier)
-                            //     .validateForm(ref);
-                            Navigator.pushNamed(
-                                context, RoutesNames.driveLoginScreen);
-                          },
-                        ),
+                        state is LoadingLoginState
+                            ? const Center(child: Loader())
+                            : CustomButton(
+                                text: "Next",
+                                width: width,
+                                onPressed: () {
+                                  ref
+                                      .read(loginNotifierProvider.notifier)
+                                      .validateForm(ref);
+                                },
+                              ),
                       ],
                     ),
                   ),
                 );
-              } else if (state is LoadingLoginState) {
-                return const Center(child: Loader());
               } else if (state is ErrorLoginState) {
                 ref
                     .read(loginNotifierProvider.notifier)

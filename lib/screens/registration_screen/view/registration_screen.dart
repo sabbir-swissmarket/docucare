@@ -2,7 +2,6 @@ import 'package:docucare/custom_widgets/custom_back_button.dart';
 import 'package:docucare/custom_widgets/custom_button.dart';
 import 'package:docucare/custom_widgets/custom_textfield.dart';
 import 'package:docucare/custom_widgets/loader.dart';
-import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/screens/registration_screen/provider/registration_provider.dart';
 import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/styles/app_styles.dart';
@@ -30,7 +29,8 @@ class RegistrationScreen extends ConsumerWidget {
           child: Consumer(
             builder: (context, ref, child) {
               RegistrationState state = ref.watch(registrationNotifierProvider);
-              if (state is InitRegistrationState) {
+              if (state is InitRegistrationState ||
+                  state is LoadingRegistrationState) {
                 return Padding(
                   padding: const EdgeInsets.fromLTRB(24, 40, 24, 0),
                   child: SingleChildScrollView(
@@ -39,9 +39,6 @@ class RegistrationScreen extends ConsumerWidget {
                       children: [
                         CustomBackButton(
                           onPressed: () {
-                            ref
-                                .read(registrationNotifierProvider.notifier)
-                                .invalidateProviders(ref);
                             Navigator.pop(context);
                           },
                         ),
@@ -65,23 +62,22 @@ class RegistrationScreen extends ConsumerWidget {
                         const SizedBox(height: 10),
                         policyCheckWidget(ref),
                         const SizedBox(height: 30),
-                        CustomButton(
-                          text: "Next",
-                          width: width,
-                          onPressed: () {
-                            // ref
-                            //     .read(registrationNotifierProvider.notifier)
-                            //     .validateForm(ref);
-                            Navigator.pushNamed(
-                                context, RoutesNames.emailConfirmationScreen);
-                          },
-                        ),
+                        state is LoadingRegistrationState
+                            ? const Center(child: Loader())
+                            : CustomButton(
+                                text: "Next",
+                                width: width,
+                                onPressed: () {
+                                  ref
+                                      .read(
+                                          registrationNotifierProvider.notifier)
+                                      .validateForm(ref);
+                                },
+                              ),
                       ],
                     ),
                   ),
                 );
-              } else if (state is LoadingRegistrationState) {
-                return const Center(child: Loader());
               } else if (state is ErrorRegistrationState) {
                 ref
                     .read(registrationNotifierProvider.notifier)

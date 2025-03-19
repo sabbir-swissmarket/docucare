@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/utils/core.dart';
+import 'package:intl/intl.dart';
 
 class Utils {
   /// Show toast messages
@@ -30,5 +31,29 @@ class Utils {
   bool isEmailValid(String email) {
     final RegExp emailRegex = RegExp(r'^[\w.-]+@[\w-]+\.[\w.-]{2,}$');
     return emailRegex.hasMatch(email);
+  }
+
+  /// Open Gmail app
+  Future<void> openGmailApp() async {
+    const mailtoUrl = 'mailto:';
+    try {
+      final Uri toLaunch = Uri.parse(mailtoUrl);
+      await launchUrl(toLaunch);
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
+  /// Format date and time
+  String formatDate(String isoDate) {
+    final dateTime = DateTime.parse(isoDate);
+    return DateFormat('yyyy-MM-dd HH:mm').format(dateTime);
+  }
+
+  /// Convert byte to GB
+  String bytesToGB(int bytes) {
+    if (bytes <= 0) return '0 GB';
+    final gb = bytes / (1024 * 1024 * 1024);
+    return '${gb.toStringAsFixed(2)} GB';
   }
 }

@@ -1,4 +1,9 @@
+import 'package:docucare/helper/enum_data.dart';
+import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/utils/core.dart';
+import 'package:docucare/utils/global_keys.dart';
+import 'package:docucare/utils/shared_pref_keys.dart';
+import 'package:docucare/utils/shared_pref_manager.dart';
 import 'package:docucare/utils/utils.dart';
 
 final emailProvider = StateProvider<String>((ref) => '');
@@ -29,6 +34,8 @@ class ErrorLoginState extends LoginState {
 class LoginStateNotifier extends StateNotifier<LoginState> {
   LoginStateNotifier() : super(InitLoginState());
   final utils = locator.get<Utils>();
+  final supabase = Supabase.instance.client;
+  final sharedPrefManager = locator.get<SharedPrefManager>();
 
   void validateForm(WidgetRef ref) {
     final email = ref.read(emailProvider);
@@ -49,7 +56,36 @@ class LoginStateNotifier extends StateNotifier<LoginState> {
 
     ref.read(formErrorProvider.notifier).state = errors;
 
-    if (errors.isNotEmpty) {}
+    if (errors.isEmpty) {
+      login(ref, email: email, password: password);
+    }
+  }
+
+  Future<void> login(WidgetRef ref,
+      {required String email, required String password}) async {
+    try {
+      state = LoadingLoginState();
+
+      final response = await supabase.auth.signInWithPassword(
+        email: email,
+        password: password,
+      );
+
+      state = InitLoginState();
+      if (response.user != null) {
+        invalidateProviders(ref);
+        await sharedPrefManager.saveEnumValue(
+            SharedPrefKeys.showScreen, Screens.driveLoginScreen);
+        await sharedPrefManager.saveObjectValue(
+            SharedPrefKeys.userData, response.user);
+        Navigator.pushNamed(
+            navigatorKey.currentContext!, RoutesNames.driveLoginScreen);
+      }
+    } on AuthException catch (e) {
+      state = ErrorLoginState(message: e.message);
+    } catch (e) {
+      state = ErrorLoginState(message: "Something went wrong. Try again.");
+    }
   }
 
   /// Invalidate provider

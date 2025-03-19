@@ -5,12 +5,14 @@ import 'package:docucare/styles/app_colors.dart';
 import 'package:docucare/styles/app_styles.dart';
 import 'package:docucare/utils/core.dart';
 import 'package:docucare/utils/screen_config.dart';
+import 'package:docucare/utils/utils.dart';
 
 class EmailConfirmationScreen extends ConsumerWidget {
   const EmailConfirmationScreen({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final utils = locator.get<Utils>();
     final width = locator.get<SizeConfig>().getFullWidth();
     return Scaffold(
       backgroundColor: AppColors.whiteColor,
@@ -38,11 +40,19 @@ class EmailConfirmationScreen extends ConsumerWidget {
               const SizedBox(height: 32),
               CustomButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, RoutesNames.loginScreen);
+                  utils.openGmailApp();
                 },
                 text: "Open Email",
                 width: width,
               ),
+              const SizedBox(height: 16),
+              CustomButton(
+                onPressed: () async {
+                  Navigator.pushNamed(context, RoutesNames.loginScreen);
+                },
+                text: "Go to Login",
+                width: width,
+              )
             ],
           ),
         ),

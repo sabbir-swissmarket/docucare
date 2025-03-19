@@ -1,4 +1,6 @@
+import 'package:docucare/routes/route_names.dart';
 import 'package:docucare/utils/core.dart';
+import 'package:docucare/utils/global_keys.dart';
 import 'package:docucare/utils/utils.dart';
 
 final emailProvider = StateProvider<String>((ref) => '');
@@ -32,6 +34,7 @@ class ErrorRegistrationState extends RegistrationState {
 class RegistrationStateNotifier extends StateNotifier<RegistrationState> {
   RegistrationStateNotifier() : super(InitRegistrationState());
   final utils = locator.get<Utils>();
+  final supabase = Supabase.instance.client;
 
   void validateForm(WidgetRef ref) {
     final email = ref.read(emailProvider);
@@ -64,7 +67,33 @@ class RegistrationStateNotifier extends StateNotifier<RegistrationState> {
 
     ref.read(formErrorProvider.notifier).state = errors;
 
-    if (errors.isNotEmpty) {}
+    if (errors.isEmpty) {
+      signup(ref, email: email, password: password);
+    }
+  }
+
+  Future<void> signup(WidgetRef ref,
+      {required String email, required String password}) async {
+    try {
+      state = LoadingRegistrationState();
+
+      final response = await supabase.auth.signUp(
+        email: email,
+        password: password,
+      );
+
+      state = InitRegistrationState();
+      if (response.user != null) {
+        invalidateProviders(ref);
+        Navigator.pushNamed(
+            navigatorKey.currentContext!, RoutesNames.emailConfirmationScreen);
+      }
+    } on AuthException catch (e) {
+      state = ErrorRegistrationState(message: e.message);
+    } catch (e) {
+      state =
+          ErrorRegistrationState(message: "Something went wrong. Try again.");
+    }
   }
 
   /// Invalidate provider

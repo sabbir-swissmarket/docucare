@@ -46,7 +46,9 @@ class WelcomeScreen extends ConsumerWidget {
                 ),
                 const SizedBox(height: 16),
                 CustomButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, RoutesNames.loginScreen);
+                  },
                   text: "Signin",
                   width: width,
                 ),
