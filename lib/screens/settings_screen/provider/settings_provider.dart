@@ -34,25 +34,39 @@ class SettingsStateNotifier extends StateNotifier<SettingsState> {
   final SupabaseClient supabase = Supabase.instance.client;
 
   Future<void> signOut(BuildContext context) async {
-    await supabase.auth.signOut().then((value) async {
-      sharedPrefManager.logOut();
-      await sharedPrefManager.saveEnumValue(
-          SharedPrefKeys.showScreen, Screens.welcomeScreen);
-      Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(
-          RoutesNames.welcomeScreen, (Route<dynamic> route) => false);
-    });
-  }
-
-  Future<void> deleteAccount(BuildContext context) async {
-    final user = supabase.auth.currentUser;
-    if (user != null) {
-      await supabase.auth.admin.deleteUser(user.id).then((value) async {
+    try {
+      state = LoadingSettingsState();
+      await supabase.auth.signOut().then((value) async {
         sharedPrefManager.logOut();
         await sharedPrefManager.saveEnumValue(
             SharedPrefKeys.showScreen, Screens.welcomeScreen);
         Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(
             RoutesNames.welcomeScreen, (Route<dynamic> route) => false);
       });
+    } catch (e) {
+      state = ErrorSettingsState(message: e.toString());
+    } finally {
+      state = InitSettingsState();
+    }
+  }
+
+  Future<void> deleteAccount(BuildContext context) async {
+    try {
+      state = LoadingSettingsState();
+      final user = supabase.auth.currentUser;
+      if (user != null) {
+        await supabase.auth.admin.deleteUser(user.id).then((value) async {
+          sharedPrefManager.logOut();
+          await sharedPrefManager.saveEnumValue(
+              SharedPrefKeys.showScreen, Screens.welcomeScreen);
+          Navigator.of(navigatorKey.currentContext!).pushNamedAndRemoveUntil(
+              RoutesNames.welcomeScreen, (Route<dynamic> route) => false);
+        });
+      }
+    } catch (e) {
+      state = ErrorSettingsState(message: e.toString());
+    } finally {
+      state = InitSettingsState();
     }
   }
 
