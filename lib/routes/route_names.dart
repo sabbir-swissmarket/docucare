@@ -16,4 +16,5 @@ class RoutesNames {
   static String home = '/home';
   static String folderViewScreen = '/folder_view';
   static String uploadDocumentScreen = '/upload_document_screen';
+  static String settingsScreen = '/settings_screen';
 }

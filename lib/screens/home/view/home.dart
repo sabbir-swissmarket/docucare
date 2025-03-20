@@ -43,9 +43,25 @@ class _HomeState extends ConsumerState<Home> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Welcome, $userName',
-                    style: Theme.of(context).textTheme.headlineMedium,
+                  Row(
+                    children: [
+                      Expanded(
+                        child: Text(
+                          'Welcome, $userName',
+                          style: Theme.of(context).textTheme.headlineSmall,
+                        ),
+                      ),
+                      IconButton(
+                        onPressed: () {
+                          Navigator.pushNamed(
+                              context, RoutesNames.settingsScreen);
+                        },
+                        icon: const Icon(
+                          Icons.settings,
+                          color: AppColors.primaryColor,
+                        ),
+                      )
+                    ],
                   ),
                   const SizedBox(height: 8),
                   Row(

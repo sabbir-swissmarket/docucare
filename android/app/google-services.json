@@ -1,0 +1,62 @@
+{
+  "project_info": {
+    "project_number": "650552663277",
+    "project_id": "docucare-a48eb",
+    "storage_bucket": "docucare-a48eb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:650552663277:android:944fe6f94bc810e05c40e4",
+        "android_client_info": {
+          "package_name": "com.example.docucare"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "650552663277-fso5dqdjnhu8mhajagbjfj2t5b2a2919.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.docucare",
+            "certificate_hash": "70c5b819b0d365ac5992f2bc1c76449b1998d938"
+          }
+        },
+        {
+          "client_id": "650552663277-rpjl5ps8hr9tuu2oqos8nhnmg7eoonef.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.docucare",
+            "certificate_hash": "468562eb40fe1e59869bc9c878e7e546947931e1"
+          }
+        },
+        {
+          "client_id": "650552663277-077qg9feeb46pgkvdmdetsl2k1a0uknd.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCY9DwNRwgOPsa5pCbZtxnCw0pzxqyMxik"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "650552663277-077qg9feeb46pgkvdmdetsl2k1a0uknd.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "650552663277-vbpva9kge6kshnq99b2kqv2iap8l1voj.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.docucare"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

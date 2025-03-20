@@ -54,19 +54,19 @@ class UploadScreenStateNotifier extends StateNotifier<UploadScreenState> {
       if (result == null) return;
 
       final file = result.files.single;
-      final fileBytes = file.bytes;
+      // final fileBytes = file.bytes;
       final fileName = file.name;
 
       // Upload the file to the specified folder in Google Drive
       final driveApi = drive.DriveApi(authClient);
-      final media = drive.Media(Stream.value(fileBytes!), fileBytes.length);
+      // final media = drive.Media(Stream.value(fileBytes!), fileBytes.length);
       final fileMetadata = drive.File()
         ..name = fileName
         ..parents = [folderId];
 
       final uploadedFile = await driveApi.files.create(
         fileMetadata,
-        uploadMedia: media,
+        // uploadMedia: drive.Media(file.readStream!, file.size),
       );
 
       // Update the list of uploaded files
