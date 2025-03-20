@@ -15,7 +15,7 @@ version.
 documentation from [Download Flutter](https://flutter.dev/docs/get-started/install) to install the given version of a flutter on your pc/mac/linux.
 
 ## Enviornment Setup
-- Create two environment file - ```.env.variables```
+- Create one environment file on the root level of the project- ```.env.variables```
 - Create two variables: 
     - ```SUPABASEURL = ENTER YOUR SUPABASE URL``` 
     - ```SUPABASE_KEY = ENTER SUPABASE ANON KEY```
